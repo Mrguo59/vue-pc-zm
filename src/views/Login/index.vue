@@ -7,7 +7,7 @@
             <li><a href="#">扫码登录</a></li>
             <li class="effect"><a href="#">账户登录</a></li>
           </ul>
-          <form>
+          <form @submit.prevent="login">
             <div class="input-text">
               <i></i>
               <input type="text" placeholder="手机号" />
@@ -38,8 +38,21 @@
 </template>
 
 <script>
+import { reqLogin } from "@api/user";
+
 export default {
   name: "Login",
+  methods: {
+    login() {
+      reqLogin("13700000000", "111111")
+        .then((res) => {
+          console.log("res", res);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
+  },
 };
 </script>
 
