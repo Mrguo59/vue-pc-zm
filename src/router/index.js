@@ -20,7 +20,7 @@ VueRouter.prototype.replace = function(location, onComplate, onAbort) {
 	if (onComplate && onAbort) {
 		return replace.call(this, location, onComplate, onAbort);
 	}
-	// 如果用户不处理失败，给默认值：空函数
+
 	return replace.call(this, location, onComplate, () => {});
 };
 
