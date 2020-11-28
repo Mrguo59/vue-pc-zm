@@ -34,7 +34,15 @@
     </div>
   </header>
 </template>
-
+          <!-- 
+            知识点
+            问题：点击搜索，路径出现问号（原因是提交了表单）
+            1. button 按钮如果没有type 那么在表单中 默认type就是submit
+              此时会提交表单，事件就绑定在form上
+                @submit.prevent="search"
+            2. 不用form表单
+                @click="search"
+           -->
 <script>
 export default {
   name: "Header",
@@ -100,7 +108,15 @@ export default {
         };
       }
       // 编程式导航：原因将来要做搜索功能（要发送请求）
-      this.$router.push(location);
+      this.$router.push(
+        location
+        // (res) => {
+        //   console.log(res);
+        // },
+        // (err) => {
+        //   console.log(err);
+        // }
+      );
     },
   },
 };

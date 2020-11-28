@@ -1,6 +1,29 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+// 重写push和replace方法
+// 目的：为了让编程式导航重复点击时不报错~
+const push = VueRouter.prototype.push;
+const replace = VueRouter.prototype.replace;
+
+VueRouter.prototype.push = function(location, onComplate, onAbort) {
+	// 如果用户想处理失败，就处理
+	if (onComplate && onAbort) {
+		return push.call(this, location, onComplate, onAbort);
+	}
+	// 如果用户不处理失败，给默认值：空函数
+	return push.call(this, location, onComplate, () => {});
+};
+
+VueRouter.prototype.replace = function(location, onComplate, onAbort) {
+	// 如果用户想处理失败，就处理
+	if (onComplate && onAbort) {
+		return replace.call(this, location, onComplate, onAbort);
+	}
+	// 如果用户不处理失败，给默认值：空函数
+	return replace.call(this, location, onComplate, () => {});
+};
+
 // 安装插件
 Vue.use(VueRouter);
 
