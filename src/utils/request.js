@@ -1,8 +1,19 @@
 /* 
   封装axios拦截器
+  	1. 设置公共的请求地址前缀
+    2. 请求拦截器：添加公共参数
+    3. 响应拦截器: 
+      成功：返回成功的Promise，值为成功的数据
+      失败：返回失败的Promise，值为失败的原因
 */
 
 import axios from 'axios';
+// 引入进度条插件
+import Nprogress from 'nprogress';
+import 'nprogress/nprogress.css';
+
+//引入element-ui组件
+import { Message } from 'element-ui';
 
 const instance = axios.create({
 	//  / 就是当前服务器地址
@@ -17,6 +28,9 @@ instance.interceptors.request.use(
 	(config) => {
 		// config 请求的配置对象
 		// 将来发送请求（请求地址，请求参数，请求方式等）都会在config中找
+
+		// 开始进度条
+		Nprogress.start();
 
 		// 修改config，用来添加公共的请求参数(现在不需要)
 		// if (token) {
@@ -60,18 +74,29 @@ instance.interceptors.response.use(
           } 
         }
     */
+		// 进度条结束
+		Nprogress.done();
+
 		// 判断响应的code是否是200
 		if (response.data.code === 200) {
 			// 返回成功的响应数据
 			return response.data.data;
 		}
 
+		const { message } = response.data;
+		// 提示错误
+		Message.error(message);
+
 		// 功能失败 --> 返回失败的Promise
-		return Promise.reject(response.data.message);
+		return Promise.reject(message);
 	},
 	// 响应失败：当响应状态码不是 2xx
 	(error) => {
+		// 进度条结束
+		Nprogress.done();
 		const message = error.message || '网络错误，请稍后再试';
+		// 提示错误
+		Message.error(message);
 
 		return Promise.reject(message);
 	}
