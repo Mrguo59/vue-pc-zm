@@ -65,6 +65,7 @@ export default {
       categoryList: [],
     };
   },
+  //组件挂载成功以后就请求数据
   async mounted() {
     const result = await reqGetBaseCategoryList();
     // console.log(result);
