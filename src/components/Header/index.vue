@@ -107,6 +107,13 @@ export default {
           searchText,
         };
       }
+
+      // 添加query参数
+      const { categoryName } = this.$route.query;
+
+      if (categoryName) {
+        location.query = this.$route.query;
+      }
       // 编程式导航：原因将来要做搜索功能（要发送请求）
       this.$router.push(
         location

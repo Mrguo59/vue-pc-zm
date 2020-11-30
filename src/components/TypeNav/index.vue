@@ -1,7 +1,11 @@
 <template>
   <!-- 商品分类导航 -->
   <div class="type-nav">
-    <div class="container">
+    <div
+      class="container"
+      @mouseenter="isSearchShow = true"
+      @mouseleave="isSearchShow = false"
+    >
       <h2 class="all">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -13,22 +17,23 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort" @click="goSearch">
-        <div class="all-sort-list2">
-          <div
-            class="item bo"
-            v-for="category in categoryList"
-            :key="category.categoryId"
-          >
-            <h3>
-              <!-- 一级分类名称 -->
-              <!-- 第一种方式，不建议使用，因为会生成很多组件，性能不好 -->
-              <!-- <router-link
+      <transition name="search">
+        <div class="sort" v-show="isHomeShow || isSearchShow">
+          <div class="all-sort-list2" @click="goSearch">
+            <div
+              class="item bo"
+              v-for="category in categoryList"
+              :key="category.categoryId"
+            >
+              <h3>
+                <!-- 一级分类名称 -->
+                <!-- 第一种方式，不建议使用，因为会生成很多组件，性能不好 -->
+                <!-- <router-link
                 :to="`/search?categoryName=${category.categoryName}&category1Id=${category.categoryId}`"
                 >{{ category.categoryName }}</router-link
               > -->
-              <!-- 第二种方式,每个元素都会绑定点击事件，性能也不好，也不建议使用-->
-              <!-- <a
+                <!-- 第二种方式,每个元素都会绑定点击事件，性能也不好，也不建议使用-->
+                <!-- <a
                 @click.prevent="
                   $router.push({
                     name: 'search',
@@ -40,30 +45,30 @@
                 "
                 >{{ category.categoryName }}</a
               > -->
-              <!-- 第三种方式，用事件委托技术，冒泡原理，建议使用-->
-              <a
-                :data-categoryName="category.categoryName"
-                :data-categoryId="category.categoryId"
-                :data-categoryType="1"
-                >{{ category.categoryName }}</a
-              >
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="categoryChilds in category.categoryChild"
-                  :key="categoryChilds.categoryId"
+                <!-- 第三种方式，用事件委托技术，冒泡原理，建议使用-->
+                <a
+                  :data-categoryName="category.categoryName"
+                  :data-categoryId="category.categoryId"
+                  :data-categoryType="1"
+                  >{{ category.categoryName }}</a
                 >
-                  <dt>
-                    <!-- 二级分类名称 -->
-                    <!-- 第一种方式，不建议使用，因为会生成很多组件，性能不好 -->
-                    <!-- <router-link
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <dl
+                    class="fore"
+                    v-for="categoryChilds in category.categoryChild"
+                    :key="categoryChilds.categoryId"
+                  >
+                    <dt>
+                      <!-- 二级分类名称 -->
+                      <!-- 第一种方式，不建议使用，因为会生成很多组件，性能不好 -->
+                      <!-- <router-link
                       :to="`/search?categoryName=${categoryChilds.categoryName}&category2Id=${categoryChilds.categoryId}`"
                       >{{ categoryChilds.categoryName }}</router-link
                     > -->
-                    <!-- 第二种方式,每个元素都会绑定点击事件，性能也不好，也不建议使用-->
-                    <!-- <a
+                      <!-- 第二种方式,每个元素都会绑定点击事件，性能也不好，也不建议使用-->
+                      <!-- <a
                       @click.prevent="
                         $router.push({
                           name: 'search',
@@ -75,27 +80,27 @@
                       "
                       >{{ categoryChilds.categoryName }}</a
                     > -->
-                    <!-- 第三种方式，用事件委托技术，冒泡原理，建议使用-->
-                    <a
-                      :data-categoryName="categoryChilds.categoryName"
-                      :data-categoryId="categoryChilds.categoryId"
-                      :data-categoryType="2"
-                      >{{ categoryChilds.categoryName }}</a
-                    >
-                  </dt>
-                  <dd>
-                    <!-- 三级分类名称 -->
-                    <em
-                      v-for="categorySons in categoryChilds.categoryChild"
-                      :key="categorySons.categoryId"
-                    >
-                      <!-- 第一种方式，不建议使用，因为会生成很多组件，性能不好 -->
-                      <!-- <router-link
+                      <!-- 第三种方式，用事件委托技术，冒泡原理，建议使用-->
+                      <a
+                        :data-categoryName="categoryChilds.categoryName"
+                        :data-categoryId="categoryChilds.categoryId"
+                        :data-categoryType="2"
+                        >{{ categoryChilds.categoryName }}</a
+                      >
+                    </dt>
+                    <dd>
+                      <!-- 三级分类名称 -->
+                      <em
+                        v-for="categorySons in categoryChilds.categoryChild"
+                        :key="categorySons.categoryId"
+                      >
+                        <!-- 第一种方式，不建议使用，因为会生成很多组件，性能不好 -->
+                        <!-- <router-link
                         :to="`/search?categoryName=${categorySons.categoryName}&category3Id=${categorySons.categoryId}`"
                         >{{ categorySons.categoryName }}</router-link
                       > -->
-                      <!-- 第二种方式,每个元素都会绑定点击事件，性能也不好，也不建议使用-->
-                      <!-- <a
+                        <!-- 第二种方式,每个元素都会绑定点击事件，性能也不好，也不建议使用-->
+                        <!-- <a
                         @click.prevent="
                           $router.push({
                             name: 'search',
@@ -107,21 +112,22 @@
                         "
                         >{{ categorySons.categoryName }}</a
                       > -->
-                      <!-- 第三种方式，用事件委托技术，冒泡原理，建议使用-->
-                      <a
-                        :data-categoryName="categorySons.categoryName"
-                        :data-categoryId="categorySons.categoryId"
-                        :data-categoryType="3"
-                        >{{ categorySons.categoryName }}</a
-                      >
-                    </em>
-                  </dd>
-                </dl>
+                        <!-- 第三种方式，用事件委托技术，冒泡原理，建议使用-->
+                        <a
+                          :data-categoryName="categorySons.categoryName"
+                          :data-categoryId="categorySons.categoryId"
+                          :data-categoryType="3"
+                          >{{ categorySons.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -131,12 +137,12 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   name: "TypeNav",
-  // data() {
-  //   return {
-  //     // 初始化响应式数据
-  //     categoryList: [],
-  //   };
-  // },
+  data() {
+    return {
+      isHomeShow: this.$route.path === "/",
+      isSearchShow: false,
+    };
+  },
   computed: {
     // 当使用vuex模块化，这种方式就不行了
     // ...mapState(["categoryList"]),
@@ -147,7 +153,7 @@ export default {
       // categoryList就是组件能接受到的数据
       // 它的值是一个函数，函数内部会调用得到值
       // 调用时会将所有vuex数据传递进去，就是state
-      categoryList: (state) => state.home.categoryList,
+      categoryList: (state) => state.home.categoryList.slice(0, 15),
     }),
   },
   methods: {
@@ -156,7 +162,7 @@ export default {
     ...mapActions(["getCategoryList"]),
     // 跳转到search
     goSearch(e) {
-      // console.log(e.target.dataset);
+      // console.log(e.target.dataset);// 元素自定义属性对象
       const { categoryname, categoryid, categorytype } = e.target.dataset;
 
       // 需求：如何获取需要的参数？
@@ -166,13 +172,27 @@ export default {
       // 判断是否是点中了a标签，才能跳转
       if (!categoryname) return;
 
-      this.$router.push({
+      // 隐藏分类列表
+      this.isSearchShow = false;
+
+      const location = {
         name: "search",
         query: {
           categoryName: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
-      });
+      };
+
+      // 判断当前是否有params参数，有加上
+      const { searchText } = this.$route.params;
+
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+      }
+
+      this.$router.push(location);
     },
   },
   mounted() {
@@ -228,6 +248,15 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+      // 控制显示隐藏过渡效果
+      &.search-enter {
+        height: 0;
+      }
+
+      &.search-enter-active {
+        transition: height 1s;
+        overflow: hidden;
+      }
 
       .all-sort-list2 {
         .item {
