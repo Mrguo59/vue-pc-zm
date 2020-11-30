@@ -128,6 +128,7 @@ export default {
       color: #fff;
       font-size: 16px;
       margin-left: 100px;
+      border: none;
     }
   }
 }
