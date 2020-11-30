@@ -10,9 +10,9 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!--楼层-->
-    <Floor :floors="floors" />
+    <Floor />
     <!--楼层-->
-    <Floor :floors="floors" />
+    <Floor />
     <!--商标-->
     <Brand />
   </div>
