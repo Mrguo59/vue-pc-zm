@@ -65,7 +65,7 @@
               <span class="floor-x-line"></span>
               <div
                 class="floor-conver-pit"
-                v-for="floorRec in floor.recommendList.slice(0, 2)"
+                v-for="floorRec in floor.recommendList.slice(2, 4)"
                 :key="floorRec"
               >
                 <img :src="floorRec" />
