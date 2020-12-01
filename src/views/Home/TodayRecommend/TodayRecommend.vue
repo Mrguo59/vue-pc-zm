@@ -1,24 +1,15 @@
 <template>
   <div class="today-recommend">
     <div class="py-container">
-      <ul class="recommend">
+      <ul class="recommend" v-for="recomm in recommends" :key="recomm.id">
         <li class="clock">
           <div class="time">
-            <img src="./images/clock.png" />
-            <h3>今日推荐</h3>
+            <img :src="recomm.bigImg" />
+            <h3>{{ recomm.text }}</h3>
           </div>
         </li>
-        <li class="banner">
-          <img src="./images/today01.png" />
-        </li>
-        <li class="banner">
-          <img src="./images/today02.png" />
-        </li>
-        <li class="banner">
-          <img src="./images/today03.png" />
-        </li>
-        <li class="banner">
-          <img src="./images/today04.png" />
+        <li class="banner" v-for="rec in recomm.carouselList" :key="rec.id">
+          <img :src="rec.imgUrl" />
         </li>
       </ul>
     </div>
@@ -26,9 +17,22 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
-  name: 'TodayRecommend',
-}
+  name: "TodayRecommend",
+  computed: {
+    ...mapState({
+      recommends: (state) => state.home.recommends,
+    }),
+  },
+  methods: {
+    ...mapActions(["getRecommends"]),
+  },
+  mounted() {
+    this.getRecommends();
+  },
+};
 </script>
 
 <style  lang="less" scoped>

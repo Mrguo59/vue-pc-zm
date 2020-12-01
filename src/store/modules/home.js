@@ -1,11 +1,13 @@
 // home组件的vuex状态
-import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors } from '@api/home';
+import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqGetRecommends, reqGetRank } from '@api/home';
 
 export default {
 	state: {
 		categoryList: [], // 首页三级分类列表数据
 		banners: [], // 首页轮播图数据
-		floors: [] // 首页楼层数据
+		floors: [], // 首页楼层数据
+		recommends: [],
+		rank: []
 	},
 
 	getters: {},
@@ -29,6 +31,16 @@ export default {
 		async getFloors({ commit }) {
 			const floors = await reqGetFloors();
 			commit('GET_FLOORS', floors);
+		},
+
+		async getRecommends({ commit }) {
+			const recommends = await reqGetRecommends();
+			commit('GET_RECOMMENDS', recommends);
+		},
+
+		async getRank({ commit }) {
+			const rank = await reqGetRank();
+			commit('GET_RANK', rank);
 		}
 	},
 
@@ -41,6 +53,12 @@ export default {
 		},
 		GET_FLOORS(state, floors) {
 			state.floors = floors;
+		},
+		GET_RECOMMENDS(state, recommends) {
+			state.recommends = recommends;
+		},
+		GET_RANK(state, rank) {
+			state.rank = rank;
 		}
 	}
 };

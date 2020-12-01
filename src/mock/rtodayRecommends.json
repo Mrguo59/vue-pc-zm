@@ -1,0 +1,13 @@
+[
+    {
+        "id|+1": 1,
+        "bigImg": "@image('57x57','@color')",
+        "text": "@ctitle(4)",
+        "carouselList|4": [
+            {
+              "id|+1": 1,
+              "imgUrl": "@image('210x250','@color')"
+            }
+          ]
+    }
+]

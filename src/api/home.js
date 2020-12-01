@@ -30,3 +30,17 @@ export const reqGetFloors = () => {
 		url: '/floors'
 	});
 };
+
+export const reqGetRecommends = () => {
+	return mockRequest({
+		methods: 'GET',
+		url: '/todayRecommend'
+	});
+};
+
+export const reqGetRank = () => {
+	return mockRequest({
+		methods: 'GET',
+		url: '/rank'
+	});
+};
