@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container" id="mySwiper">
+  <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
@@ -36,6 +36,31 @@ export default {
       required: true,
     },
   },
+  methods: {
+    RotationFn() {
+      // 使用 this.$refs.swiper 取代 .swiper-container
+      // 使用 this.$refs.swiper 才能保证轮播图组件使用的自己的swiper
+      this.swiper = new Swiper(this.$refs.swiper, {
+        autoplay: {
+          delay: 2000, // 轮播间隔时间
+          disableOnInteraction: false, //当用户点击下一页时，仍会开启自动轮播
+        },
+        loop: true, // 循环模式选项
+
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true, //下方按钮可以点击
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    },
+  },
   // 轮播图数据要有 且 轮播图DOM元素要渲染完成 才能 new Swiper
   watch: {
     rotationList() {
@@ -47,27 +72,21 @@ export default {
       // 确保：swiper不能new多次
       if (this.Swiper) return;
       this.$nextTick(() => {
-        this.swiper = new Swiper(".swiper-container", {
-          autoplay: {
-            delay: 2000, // 轮播间隔时间
-            disableOnInteraction: false, //当用户点击下一页时，仍会开启自动轮播
-          },
-          loop: true, // 循环模式选项
-
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true, //下方按钮可以点击
-          },
-
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-        });
+        this.RotationFn();
       });
     },
+  },
+  mounted() {
+    // 轮播图数据要有 且 轮播图DOM元素要渲染完成 才能 new Swiper
+    /* 
+      1. ListContainer组件
+        一上来没有数据 -- 触发watch
+      2. Floor 
+        一上来就有数据 -- mounted  
+    */
+    if (!this.rotationList.length) return;
+
+    this.RotationFn();
   },
 };
 </script>

@@ -1,16 +1,18 @@
 <template>
   <div class="floor">
-    <div class="py-container" v-for="floor in floors" :key="floor.id">
+    <div class="py-container">
       <div class="title clearfix">
         <h3 class="fl">{{ floor.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
             <li
               class="active"
-              v-for="floorNavList in floor.navList"
-              :key="floorNavList.text"
+              v-for="(floorNavList, index) in floor.navList"
+              :key="index"
             >
-              <a href="#tab1" data-toggle="tab">{{ floorNavList.text }}</a>
+              <a :href="floorNavList.url" data-toggle="tab">{{
+                floorNavList.text
+              }}</a>
             </li>
           </ul>
         </div>
@@ -21,8 +23,8 @@
             <div class="blockgary">
               <ul class="jd-list">
                 <li
-                  v-for="floorKeywords in floor.keywords"
-                  :key="floorKeywords"
+                  v-for="(floorKeywords, index) in floor.keywords"
+                  :key="index"
                 >
                   {{ floorKeywords }}
                 </li>
@@ -30,32 +32,15 @@
               <img :src="floor.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="floorCar in floor.carouselList"
-                    :key="floorCar.id"
-                  >
-                    <img :src="floorCar.imgUrl" />
-                  </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <Rotation :rotationList="floor.carouselList" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
-              <div
-                class="floor-conver-pit"
-                v-for="floorRec in floor.recommendList.slice(0, 2)"
-                :key="floorRec"
-              >
-                <img :src="floorRec" />
+              <div class="floor-conver-pit">
+                <img :src="floor.recommendList[0]" />
+              </div>
+              <div class="floor-conver-pit">
+                <img :src="floor.recommendList[1]" />
               </div>
             </div>
             <div class="split center">
@@ -63,12 +48,11 @@
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
-              <div
-                class="floor-conver-pit"
-                v-for="floorRec in floor.recommendList.slice(2, 4)"
-                :key="floorRec"
-              >
-                <img :src="floorRec" />
+              <div class="floor-conver-pit">
+                <img :src="floor.recommendList[2]" />
+              </div>
+              <div class="floor-conver-pit">
+                <img :src="floor.recommendList[3]" />
               </div>
             </div>
           </div>
@@ -79,10 +63,15 @@
 </template>
 
 <script>
+import Rotation from "@comps/Rotation";
+
 export default {
   name: "Floor",
   props: {
-    floors: Array,
+    floor: Object,
+  },
+  components: {
+    Rotation,
   },
 };
 </script>
@@ -182,7 +171,6 @@ export default {
           .floorBanner {
             width: 330px;
             height: 100%;
-            overflow: hidden;
           }
 
           .split {
