@@ -14,6 +14,9 @@ import './mock/mockServer';
 Vue.config.productionTip = false;
 
 new Vue({
+	beforeCreate() {
+		Vue.prototype.$bus = this;
+	},
 	render: (h) => h(App),
 	// 应用router
 	router,

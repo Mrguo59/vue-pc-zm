@@ -135,6 +135,7 @@ export default {
   name: "TypeNav",
   data() {
     return {
+      // 初始化响应式数据
       isHomeShow: this.$route.path === "/",
       isSearchShow: false,
     };
@@ -188,7 +189,14 @@ export default {
         };
       }
 
-      this.$router.push(location);
+      //退回主页功能
+      // this.$route.path 路径路由
+      // this.$route.name 命名路由名称
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
   mounted() {

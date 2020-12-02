@@ -115,16 +115,28 @@ export default {
         location.query = this.$route.query;
       }
       // 编程式导航：原因将来要做搜索功能（要发送请求）
-      this.$router.push(
-        location
-        // (res) => {
-        //   console.log(res);
-        // },
-        // (err) => {
-        //   console.log(err);
-        // }
-      );
+
+      //退回主页功能，第一种方式
+      // this.$route.path 路径路由
+      // this.$route.name 命名路由名称
+      // if (this.$route.path.indexOf("/search") > -1) {
+      //   this.$router.replace(location);
+      // } else {
+      //   this.$router.push(location);
+      // }
+      //退回主页功能，第二种方式
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", () => {
+      // 清空searchText
+      this.searchText = "";
+    });
   },
 };
 </script>
