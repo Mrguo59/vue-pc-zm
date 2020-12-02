@@ -47,23 +47,53 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  @click="spotOrder('1')"
+                >
+                  <a
+                    >综合
+                    <i
+                      :class="{
+                        iconfont: true,
+                        'icon-xia--jiantou': isSwitch, // 降序图标
+                        'icon-shang--jiantou': !isSwitch, // 升序图标
+                      }"
+                    ></i>
+                  </a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  @click="spotOrder('2')"
+                >
+                  <a
+                    >价格
+                    <div class="nav-Price">
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-shangjiantou': true,
+                          deactive: options.order.indexOf('2') > -1 && isPrice,
+                        }"
+                      ></i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-xiajiantou': true,
+                          deactive: options.order.indexOf('2') > -1 && !isPrice,
+                        }"
+                      ></i>
+                    </div>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -161,12 +191,14 @@ export default {
         category3Id: "", // 三级分类id
         categoryName: "", // 分类名称
         keyword: "", // 搜索内容（搜索关键字）
-        order: "", // 排序方式：1：综合排序  2：价格排序   asc 升序  desc 降序
+        order: "1:desc", // 排序方式：1：综合排序  2：价格排序   asc 升序  desc 降序
         pageNo: 1, // 分页的页码（第几页）
         pageSize: 5, // 分页的每页商品数量
         props: [], // 商品属性
         trademark: "", // 品牌
       },
+      isSwitch: true, // 综合排序图标
+      isPrice: false, // 价格排序图标
     };
   },
   watch: {
@@ -253,6 +285,37 @@ export default {
     // 删除品牌属性
     delProps(index) {
       this.options.props.splice(index);
+      this.updataSearchList();
+    },
+    // 设置排序方式  默认值1:desc
+    spotOrder(order) {
+      // console.log(order);//order是传过来的新数据
+      let [orderNum, orderType] = this.options.order.split(":");
+      // console.log(orderNum);//orderNum是data里的老数据
+      // 不相等点击的就是第一次：不改变图标
+      // 相等点击的就是第二次：改变图标
+      //判断新数据和老数据是否相等，如果相等，再判断新数据是否为1，如果为1，说明点击的是综合排序，就让综合排序图标改变，如果不是1就把价格排序图标改变，同时让orderType也改变，如果新数据和老数据不相等，此时就不会改变图标，但是可能会导致orderType和order不匹配，然后再判断新数据是否为1，如果为1，就根据isSwitch的状态改变对应的orderType的值，如果不为1，就把价格初始化为升序，同时也把orderType改变为对应的值
+      if (orderNum === order) {
+        // 看order是1改综合排序
+        // 看order是2改价格排序
+        if (order === "1") {
+          // console.log(1);
+          this.isSwitch = !this.isSwitch;
+        } else {
+          // console.log(2);
+          this.isPrice = !this.isPrice;
+        }
+        orderType = orderType === "desc" ? "asc" : "desc";
+      } else {
+        if (order === "1") {
+          orderType = this.isSwitch ? "desc" : "asc";
+        } else {
+          this.isPrice = false;
+          orderType = "asc";
+        }
+      }
+
+      this.options.order = `${order}:${orderType}`;
       this.updataSearchList();
     },
   },
@@ -366,19 +429,35 @@ export default {
             li {
               float: left;
               line-height: 18px;
-
               a {
-                display: block;
+                display: flex;
                 cursor: pointer;
                 padding: 11px 15px;
                 color: #777;
                 text-decoration: none;
+                position: relative;
+                i {
+                  font-size: 12px;
+                }
               }
 
               &.active {
                 a {
                   background: #e1251b;
                   color: #fff;
+                }
+              }
+            }
+            .nav-Price {
+              height: 15px;
+              line-height: 8px;
+              display: flex;
+              flex-direction: column;
+              margin-top: 1px;
+              i {
+                transform: scale(0.8);
+                &.deactive {
+                  color: rgba(255, 255, 255, 0.5);
                 }
               }
             }
