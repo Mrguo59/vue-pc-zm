@@ -4,7 +4,11 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="trademark in trademarkList" :key="trademark.tmId">
+          <li
+            v-for="trademark in trademarkList"
+            :key="trademark.tmId"
+            @click="ChooseTrademark(`${trademark.tmId}:${trademark.tmName}`)"
+          >
             {{ trademark.tmName }}
           </li>
         </ul>
@@ -18,9 +22,31 @@
       <div class="fl key">{{ attrs.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue, index) in attrs.attrValueList" :key="index">
+          <!-- 第一种触发自定义事件的方式 -->
+          <li
+            v-for="(attrValue, index) in attrs.attrValueList"
+            :key="index"
+            @click="
+              $emit(
+                'choose-props',
+                `${attrs.attrId}:${attrValue}:${attrs.attrName}`
+              )
+            "
+          >
             <a>{{ attrValue }}</a>
           </li>
+          <!-- 第二种触发自定义事件的方式 -->
+          <!-- <li
+            v-for="(attrValue, index) in attrs.attrValueList"
+            :key="index"
+            @click="
+              $listeners['choose-props'](
+                `${attrs.attrId}:${attrValue}:${attrs.attrName}`
+              )
+            "
+          >
+            <a>{{ attrValue }}</a>
+          </li> -->
         </ul>
       </div>
       <div class="fl ext"></div>
@@ -33,6 +59,9 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "SearchSelector",
+  props: {
+    ChooseTrademark: Function,
+  },
   computed: {
     ...mapGetters(["trademarkList", "attrsList"]),
   },
