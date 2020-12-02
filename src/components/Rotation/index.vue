@@ -64,6 +64,7 @@ export default {
   // 轮播图数据要有 且 轮播图DOM元素要渲染完成 才能 new Swiper
   watch: {
     rotationList() {
+      //第一次rotationList是个空数组，所以不会触发监视属性
       // [] --> 最终的数据 数据发生变化才会触发
       // 轮播图DOM元素要渲染完成 --> 轮播图数据
       // watch为了确保有轮播图数据
@@ -84,6 +85,7 @@ export default {
       2. Floor 
         一上来就有数据 -- mounted  
     */
+    //如果rotationList没有数据，就不再执行了
     if (!this.rotationList.length) return;
 
     this.RotationFn();

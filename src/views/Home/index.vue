@@ -10,6 +10,7 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!--楼层-->
+    <!-- 一上来floors是个空数组，不会产生Floor组件 -->
     <Floor v-for="floor in floors" :key="floor.id" :floor="floor" />
     <!--商标-->
     <Brand />
