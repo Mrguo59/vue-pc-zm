@@ -141,18 +141,35 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <el-pagination
-            background
-            layout="prev, pager, next,total,jumper,sizes"
-            :total="total"
-            :page-sizes="[5, 10, 15, 20]"
-            :page-size="5"
-            :pager-count="7"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="options.pageNo"
-          >
-          </el-pagination>
+          <div class="fr page">
+            <div class="sui-pagination clearfix">
+              <ul>
+                <li class="prev disabled">
+                  <a href="#">«上一页</a>
+                </li>
+                <li class="active">
+                  <a href="#">1</a>
+                </li>
+                <li>
+                  <a href="#">2</a>
+                </li>
+                <li>
+                  <a href="#">3</a>
+                </li>
+                <li>
+                  <a href="#">4</a>
+                </li>
+                <li>
+                  <a href="#">5</a>
+                </li>
+                <li class="dotted"><span>...</span></li>
+                <li class="next">
+                  <a href="#">下一页»</a>
+                </li>
+              </ul>
+              <div><span>共10页&nbsp;</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -198,12 +215,12 @@ export default {
     // }
   },
   computed: {
-    ...mapGetters(["goodsList", "total"]),
+    ...mapGetters(["goodsList"]),
   },
   methods: {
     ...mapActions(["getSearchList"]),
     // 更新商品列表
-    updataSearchList(pageNo = 1) {
+    updataSearchList() {
       // 一上来发送请求会携带参数
       // 解构赋值提取 params 中 searchText 属性
       // 将 searchText 重命名为 keyword
@@ -221,7 +238,6 @@ export default {
         category2Id,
         category3Id,
         categoryName,
-        pageNo,
       };
       this.options = options;
       this.getSearchList(options);
@@ -301,17 +317,6 @@ export default {
 
       this.options.order = `${order}:${orderType}`;
       this.updataSearchList();
-    },
-    // 当每页条数发生变化触发
-    handleSizeChange(pageSize) {
-      console.log(pageSize);
-      this.options.pageSize = pageSize;
-      this.updataSearchList();
-    },
-    // 当页码发生变化触发
-    handleCurrentChange(pageNo) {
-      console.log(pageNo);
-      this.updataSearchList(pageNo);
     },
   },
   mounted() {
