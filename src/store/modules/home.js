@@ -1,5 +1,12 @@
 // home组件的vuex状态
-import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqGetRecommends, reqGetRank } from '@api/home';
+import {
+	reqGetBaseCategoryList,
+	reqGetBanners,
+	reqGetFloors,
+	reqGetRecommends,
+	reqGetRank,
+	reqGetBrand
+} from '@api/home';
 
 export default {
 	state: {
@@ -7,7 +14,8 @@ export default {
 		banners: [], // 首页轮播图数据
 		floors: [], // 首页楼层数据
 		recommends: [],
-		rank: []
+		ranks: [],
+		brands: []
 	},
 
 	getters: {},
@@ -39,8 +47,13 @@ export default {
 		},
 
 		async getRank({ commit }) {
-			const rank = await reqGetRank();
-			commit('GET_RANK', rank);
+			const ranks = await reqGetRank();
+			commit('GET_RANK', ranks);
+		},
+
+		async getBrand({ commit }) {
+			const brands = await reqGetBrand();
+			commit('GET_BRAND', brands);
 		}
 	},
 
@@ -57,8 +70,11 @@ export default {
 		GET_RECOMMENDS(state, recommends) {
 			state.recommends = recommends;
 		},
-		GET_RANK(state, rank) {
-			state.rank = rank;
+		GET_RANK(state, ranks) {
+			state.ranks = ranks;
+		},
+		GET_BRAND(state, brands) {
+			state.brands = brands;
 		}
 	}
 };

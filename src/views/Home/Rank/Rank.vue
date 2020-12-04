@@ -5,13 +5,13 @@
         <a
           href="javascript:;"
           class="on"
-          v-for="rankChild in rank.slice(0, 3)"
-          :key="rankChild.id"
+          v-for="rank in ranks.slice(0, 3)"
+          :key="rank.id"
         >
           <p class="img">
             <i></i>
           </p>
-          <p class="text">{{ rankChild.title }}</p>
+          <p class="text">{{ rank.title }}</p>
         </a>
         <!-- <a href="javascript:;">
           <p class="img">
@@ -30,10 +30,10 @@
     <div class="content">
       <ul>
         <li>
-          <div class="img-item" v-for="rankChild in rank" :key="rankChild.id">
+          <div class="img-item" v-for="rank in ranks" :key="rank.id">
             <p class="tab-pic">
               <a href="#">
-                <img :src="rankChild.imgUrl" />
+                <img :src="rank.imgUrl" />
               </a>
             </p>
             <div class="tab-info">
@@ -107,7 +107,7 @@ export default {
   name: "Rank",
   computed: {
     ...mapState({
-      rank: (state) => state.home.rank,
+      ranks: (state) => state.home.ranks,
     }),
   },
   methods: {

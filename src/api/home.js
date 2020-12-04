@@ -44,3 +44,10 @@ export const reqGetRank = () => {
 		url: '/rank'
 	});
 };
+
+export const reqGetBrand = () => {
+	return mockRequest({
+		methods: 'GET',
+		url: '/brand'
+	})
+}

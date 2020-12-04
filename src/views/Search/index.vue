@@ -56,8 +56,8 @@
                     <i
                       :class="{
                         iconfont: true,
-                        'icon-xia--jiantou': isSwitch, // 降序图标
                         'icon-shang--jiantou': !isSwitch, // 升序图标
+                        'icon-xia--jiantou': isSwitch, // 降序图标
                       }"
                     ></i>
                   </a>
@@ -263,6 +263,7 @@ export default {
     },
     // 添加品牌属性并更新数据
     ChooseProps(prop) {
+      if (this.options.props.includes(prop)) return;
       this.options.props.push(prop);
       this.updataSearchList();
     },
@@ -272,13 +273,13 @@ export default {
       this.updataSearchList();
     },
     // 设置排序方式  默认值1:desc
+    // 不相等点击的就是第一次：不改变图标
+    // 相等点击的就是第二次：改变图标
+    //给综合按钮和价格按钮绑定点击事件，data中的order默认值是1:desc,如果点击综合按钮就传1，如果点价格按钮就传2，综合按钮默认是降序，对应的值应该是1:desc,把data里的order解构出来，用传过的值和data里的order值对比，如果相等，说明是第二次点击，再判断点击的是哪个按钮，然后取反，从而改变图标，对应的ordertype也要改变，如果不相等说明是第一次点击，第一次点击不改变图标，但是也要判断点击的是哪个按钮，如果点击的是综合按钮，综合按钮对应的ordertype也不要改变，如果点击的是价格按钮，就把价格按钮默认设置为升序，也要设置对应的ordertype
     spotOrder(order) {
       // console.log(order);//order是传过来的新数据
       let [orderNum, orderType] = this.options.order.split(":");
       // console.log(orderNum);//orderNum是data里的老数据
-      // 不相等点击的就是第一次：不改变图标
-      // 相等点击的就是第二次：改变图标
-      //判断新数据和老数据是否相等，如果相等，再判断新数据是否为1，如果为1，说明点击的是综合排序，就让综合排序图标改变，如果不是1就把价格排序图标改变，同时让orderType也改变，如果新数据和老数据不相等，此时就不会改变图标，但是可能会导致orderType和order不匹配，然后再判断新数据是否为1，如果为1，就根据isSwitch的状态改变对应的orderType的值，如果不为1，就把价格初始化为升序，同时也把orderType改变为对应的值
       if (orderNum === order) {
         // 看order是1改综合排序
         // 看order是2改价格排序
@@ -289,9 +290,11 @@ export default {
           // console.log(2);
           this.isPrice = !this.isPrice;
         }
+        //进来这个判断说明在反复的点击，相应的ordertype的值就是上一次的值的取反，因为图标也改变了
         orderType = orderType === "desc" ? "asc" : "desc";
       } else {
         if (order === "1") {
+          //isSwitch为true就是降序，为false就是升序，因为设置的默认值就是true是降序，false是升序
           orderType = this.isSwitch ? "desc" : "asc";
         } else {
           this.isPrice = false;
