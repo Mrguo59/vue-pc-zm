@@ -48,7 +48,7 @@
             <div class="navbar-inner filter">
               <ul class="sui-nav">
                 <li
-                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  :class="{ active: orderIndex('1') }"
                   @click="spotOrder('1')"
                 >
                   <a
@@ -72,7 +72,7 @@
                   <a>评价</a>
                 </li>
                 <li
-                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  :class="{ active: orderIndex('2') }"
                   @click="spotOrder('2')"
                 >
                   <a
@@ -82,14 +82,14 @@
                         :class="{
                           iconfont: true,
                           'icon-shangjiantou': true,
-                          deactive: options.order.indexOf('2') > -1 && isPrice,
+                          deactive: orderIndex('2') && isPrice,
                         }"
                       ></i>
                       <i
                         :class="{
                           iconfont: true,
                           'icon-xiajiantou': true,
-                          deactive: options.order.indexOf('2') > -1 && !isPrice,
+                          deactive: orderIndex('2') && !isPrice,
                         }"
                       ></i>
                     </div>
@@ -104,9 +104,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goods.id}`"
                       ><img :src="goods.defaultImg"
-                    /></a>
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -141,7 +141,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <el-pagination
+          <Pagination
+            :pageSize="5"
+            :pagerCount="7"
+            :total="total"
+            :currentPage="options.pageNo"
+          />
+          <!-- <el-pagination
             background
             layout="prev, pager, next,total,jumper,sizes"
             :total="total"
@@ -152,7 +158,7 @@
             @current-change="handleCurrentChange"
             :current-page="options.pageNo"
           >
-          </el-pagination>
+          </el-pagination> -->
         </div>
       </div>
     </div>
@@ -162,6 +168,7 @@
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 import TypeNav from "@comps/TypeNav";
+import Pagination from "@comps/Pagination";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -253,6 +260,7 @@ export default {
     },
     // 添加品牌并更新数据
     ChooseTrademark(trademark) {
+      if (this.options.trademark) return;
       this.options.trademark = trademark;
       this.updataSearchList();
     },
@@ -263,6 +271,7 @@ export default {
     },
     // 添加品牌属性并更新数据
     ChooseProps(prop) {
+      // 判断属性是否存在
       if (this.options.props.includes(prop)) return;
       this.options.props.push(prop);
       this.updataSearchList();
@@ -316,6 +325,10 @@ export default {
       console.log(pageNo);
       this.updataSearchList(pageNo);
     },
+    // 判断order以 xxx 开头
+    orderIndex(order) {
+      return this.options.order.indexOf(order) > -1;
+    },
   },
   mounted() {
     this.updataSearchList();
@@ -323,6 +336,7 @@ export default {
   components: {
     SearchSelector,
     TypeNav,
+    Pagination,
   },
 };
 </script>
