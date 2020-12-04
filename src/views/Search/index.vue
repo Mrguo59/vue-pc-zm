@@ -115,11 +115,10 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
+                    <router-link
+                      :to="`/detail/${goods.id}`"
                       title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
+                      >{{ goods.title }}</router-link
                     >
                   </div>
                   <div class="commit">
@@ -142,6 +141,7 @@
           </div>
           <!-- 分页器 -->
           <Pagination
+            @current-change="handleCurrentChange"
             :pageSize="5"
             :pagerCount="7"
             :total="total"
