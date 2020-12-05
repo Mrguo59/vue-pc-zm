@@ -102,19 +102,46 @@ export default {
 
       let start, end;
       // 开始计算
+      /*
+        start
+          1. start = myCurrentPage - halfCount
+            1...3 4 [5] 6 7...10
+               3   =       5       -    2
+            问题：
+              1 [2] 3 4 5 6 ...10  
+               0    =      2        -    2
+            解决：修正start的值，不能小于1
+
+            问题：
+              1 ... 5 6 7 8 [9] 10  
+              7  =   9  - 2
+           
+        end 
+          2. end = start + count - 1
+            1...3 4 [5] 6 7...10
+               7   =  3  +  5 - 1
+      */
+
+      // 1 [2] 3 4 5 6 ...10
+      // 1...3 4 [5] 6 7...10
+      // 1 ... 5 6 7 8 [9] 10
+      // 1 [2] 3
+      // [1] --> 如果start大于总页数，不显示
+
       if (totalPages - helfCount <= myCurrentPage) {
+        //特殊情况 // 1 ... 5 6 7 8 [9] 10
         start = totalPages - count;
       } else {
         // 正常情况
         start = myCurrentPage - helfCount;
       }
-
+      //修正start  // 1 [2] 3 4 5 6 ...10
       if (start <= 1) {
         start = 2;
       }
       // 正常情况
       end = start + count - 1;
-
+      //数据比较少，让显示的页数比较多的时候，需要修正  // 1 [2] 3
       if (end >= totalPages) {
         end = totalPages - 1;
       }
