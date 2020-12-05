@@ -3,10 +3,10 @@
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
-        v-for="skuImage in skuImageList"
+        v-for="(skuImage, index) in skuImageList"
         :key="skuImage.id"
       >
-        <img :src="skuImage.imgUrl" />
+        <img :src="skuImage.imgUrl" @click="updataImgIndex(index)" />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -23,6 +23,7 @@ export default {
   name: "ImageList",
   props: {
     skuImageList: Array,
+    updataImgIndex: Function,
   },
   watch: {
     skuImageList() {
@@ -33,7 +34,8 @@ export default {
           slidesPerView: 5, // 每页显示轮播图的数量
           spaceBetween: 30, // 轮播图间距
           slidesPerGroup: 5, // 切换时切换轮播图的数量
-          navigation: {//左右的按钮
+          navigation: {
+            //左右的按钮
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           },

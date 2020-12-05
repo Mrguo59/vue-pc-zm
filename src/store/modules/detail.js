@@ -6,7 +6,9 @@ export default {
 		DetailList: {
 			categoryView: {}, // 分类数据
 			spuSaleAttrList: [], // 商品详情数据
-			skuInfo: {} // 商品选择属性数据列表
+			skuInfo: {
+				skuImageList: []
+			} // 商品选择属性数据列表
 		}
 	},
 	getters: {
