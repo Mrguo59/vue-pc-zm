@@ -101,11 +101,14 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <el-input-number
+                  v-model="skuNum"
+                  controls-position="right"
+                  :min="1"
+                  :max="100"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -354,16 +357,33 @@ export default {
   name: "Detail",
   data() {
     return {
-      zoomImgIndex: 0,// 当前选中图片的下标
+      zoomImgIndex: 0, // 当前选中图片的下标
+      skuNum: 1, // 商品数量
     };
   },
   computed: {
     ...mapGetters(["categoryView", "spuSaleAttrList", "skuInfo"]),
   },
   methods: {
-    ...mapActions(["getDetailList"]),
+    ...mapActions(["getDetailList", "reqPostAddToCart"]),
+    //更新选中图片的下标
     updataImgIndex(index) {
       this.zoomImgIndex = index;
+    },
+    // 加入购物车
+    async addCart() {
+      try {
+        // 发送请求，加入购物车
+        // actions函数必须返回一个promise对象，才会等待它执行
+        await this.reqPostAddToCart({
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum,
+        });
+        // 一旦加入购物车，跳转到加入购物车成功页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   mounted() {
@@ -541,7 +561,7 @@ export default {
 
           .cartWrap {
             .controls {
-              width: 48px;
+              // width: 48px;
               position: relative;
               float: left;
               margin-right: 15px;

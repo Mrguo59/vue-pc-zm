@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
@@ -30,7 +30,7 @@ export default {
       // 一旦触发，说明值发生了变化，此时就有数据
       // 等数据回来，渲染完成DOM元素
       this.$nextTick(() => {
-        new Swiper(".swiper-container", {
+        new Swiper(this.$refs.swiper, {
           slidesPerView: 5, // 每页显示轮播图的数量
           spaceBetween: 30, // 轮播图间距
           slidesPerGroup: 5, // 切换时切换轮播图的数量

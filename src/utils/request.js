@@ -15,6 +15,10 @@ import 'nprogress/nprogress.css';
 //引入element-ui组件
 import { Message } from 'element-ui';
 
+import getUserTempId from './getUserTempId';
+
+const userTempId = getUserTempId();
+
 const instance = axios.create({
 	//  / 就是当前服务器地址
 	baseURL: '/api' // 公共的基础路径
@@ -36,6 +40,9 @@ instance.interceptors.request.use(
 		// if (token) {
 		//   config.headers.token = token;
 		// }
+
+		config.headers.userTempId = userTempId;
+
 		return config;
 	}
 	// 初始化Promise.resolve()返回默认成功的Promise，只会触发成功的回调
