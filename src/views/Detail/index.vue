@@ -365,7 +365,7 @@ export default {
     ...mapGetters(["categoryView", "spuSaleAttrList", "skuInfo"]),
   },
   methods: {
-    ...mapActions(["getDetailList", "reqPostAddToCart"]),
+    ...mapActions(["getDetailList", "PostAddToCart"]),
     //更新选中图片的下标
     updataImgIndex(index) {
       this.zoomImgIndex = index;
@@ -375,7 +375,7 @@ export default {
       try {
         // 发送请求，加入购物车
         // actions函数必须返回一个promise对象，才会等待它执行
-        await this.reqPostAddToCart({
+        await this.PostAddToCart({
           skuId: this.skuInfo.id,
           skuNum: this.skuNum,
         });

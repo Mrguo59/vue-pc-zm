@@ -28,7 +28,12 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="updataNum(cart.skuId, -1, cart.skuNum)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
@@ -36,7 +41,12 @@
               minnum="1"
               class="itxt"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="updataNum(cart.skuId, 1, cart.skuNum)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -60,10 +70,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ total }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -82,9 +95,37 @@ export default {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
+    // 商品总数
+    total() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => (p += c.skuNum), 0);
+    },
+    // 商品总价
+    totalPrice() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => (p += c.skuNum * c.skuPrice), 0);
+    },
   },
   methods: {
-    ...mapActions(["getCartList"]),
+    ...mapActions(["getCartList", "PostAddToCart"]),
+    // 更新商品数量
+    async updataNum(skuId, skuNum, lastSkuNum) {
+      const num = lastSkuNum + skuNum;
+      if (num > 0) {
+        // 更新商品
+        await this.PostAddToCart({
+          skuId,
+          skuNum,
+        });
+      }
+
+      // 第一种方式（再发一次请求）
+      // 刷新页面
+      // this.getCartList();
+      // 第二种方式手动更新vuex的数据 --> 页面就会重新渲染
+    },
   },
   mounted() {
     this.getCartList();
