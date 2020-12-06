@@ -348,7 +348,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
 import TypeNav from "@comps/TypeNav";
@@ -366,6 +366,7 @@ export default {
   },
   methods: {
     ...mapActions(["getDetailList", "PostAddToCart"]),
+    ...mapMutations(["SKU_INFO_DATA"]),
     //更新选中图片的下标
     updataImgIndex(index) {
       this.zoomImgIndex = index;
@@ -379,6 +380,8 @@ export default {
           skuId: this.skuInfo.id,
           skuNum: this.skuNum,
         });
+        //把skuInfo放到vuex中，将来让AddCartSuccess组件使用
+        this.SKU_INFO_DATA(this.skuInfo);
         // 一旦加入购物车，跳转到加入购物车成功页面
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
       } catch (error) {

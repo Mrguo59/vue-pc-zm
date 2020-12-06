@@ -1,8 +1,9 @@
-import { reqGetCartList, reqPostAddToCart } from '@api/shopcart';
+import { reqGetCartList, reqPostAddToCart, reqDeleteCart } from '@api/shopcart';
 
 export default {
 	state: {
-		cartList: [] // 所有购物车数据
+		cartList: [], // 所有购物车数据
+		skuInfo: {} //AddCartSuccess组件数据
 	},
 	getters: {},
 	actions: {
@@ -18,6 +19,11 @@ export default {
 			// 1. 手动更新vuex的数据 --> 页面就会重新渲染
 			// 2. 重新请求所有购物车数据
 			commit('POST_ADDTO_CART', { skuId, skuNum });
+		},
+		//删除购物车商品
+		async DeleteCart({ commit }, skuId) {
+			await reqDeleteCart(skuId);
+			commit('DELETE_CART', skuId);
 		}
 	},
 	mutations: {
@@ -31,6 +37,14 @@ export default {
 				}
 				return cart;
 			});
+		},
+		//删除购物车商品
+		DELETE_CART(state, skuId) {
+			state.cartList = state.cartList.filter((cart) => cart.skuId !== skuId);
+		},
+		//AddCartSuccess组件数据函数
+		SKU_INFO_DATA(state, skuInfo) {
+			state.skuInfo = skuInfo;
 		}
 	}
 };

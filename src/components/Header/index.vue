@@ -10,7 +10,7 @@
         <div class="top-right">
           <ul>
             <li class="active"><a href="#">我的订单</a></li>
-            <li><a href="#">我的购物车</a></li>
+            <li><router-link to="/shopcart">我的购物车</router-link></li>
             <li><a href="#">我的尚品汇</a></li>
             <li><a href="#">尚品汇会员</a></li>
             <li><a href="#">企业采购</a></li>

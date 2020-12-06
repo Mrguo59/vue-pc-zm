@@ -52,7 +52,9 @@
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="#none" class="sindelet" @click="deleteCart(cart.skuId)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -109,7 +111,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCartList", "PostAddToCart"]),
+    ...mapActions(["getCartList", "PostAddToCart", "DeleteCart"]),
     // 更新商品数量
     async updataNum(skuId, skuNum, lastSkuNum) {
       const num = lastSkuNum + skuNum;
@@ -120,11 +122,14 @@ export default {
           skuNum,
         });
       }
-
       // 第一种方式（再发一次请求）
       // 刷新页面
       // this.getCartList();
       // 第二种方式手动更新vuex的数据 --> 页面就会重新渲染
+    },
+    //删除购物车商品
+    deleteCart(skuId) {
+      this.DeleteCart(skuId);
     },
   },
   mounted() {
