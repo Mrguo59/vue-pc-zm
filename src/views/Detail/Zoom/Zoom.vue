@@ -3,13 +3,13 @@
     <!-- 中图 -->
     <img :src="imgUrl" />
     <!-- 和中图一样大小的div -->
-    <div class="event"></div>
+    <div class="event" @mousemove="handleMove"></div>
     <!-- 大图 -->
     <div class="big">
-      <img :src="bigImgUrl" />
+      <img :src="bigImgUrl" ref="bigImg" />
     </div>
     <!-- 绿色的遮罩层 -->
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -19,6 +19,32 @@ export default {
   props: {
     imgUrl: String,
     bigImgUrl: String,
+  },
+  methods: {
+    handleMove(e) {
+      // console.log(e);
+      let x = e.offsetX - 100;
+      let y = e.offsetY - 100;
+      // console.log(x);
+      // console.log(y);
+      if (x <= 0) {
+        x = 0;
+      }
+      if (x >= 200) {
+        x = 200;
+      }
+      if (y >= 200) {
+        y = 200;
+      }
+      if (y <= 0) {
+        y = 0;
+      }
+
+      this.$refs.mask.style.left = x + "px";
+      this.$refs.mask.style.top = y + "px";
+      this.$refs.bigImg.style.left = -2 * x + "px";
+      this.$refs.bigImg.style.top = -2 * y + "px";
+    },
   },
 };
 </script>
