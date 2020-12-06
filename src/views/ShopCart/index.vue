@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" :checked="cart.isChecked" name="chk_list" />
+            <input
+              type="checkbox"
+              :checked="cart.isChecked"
+              name="chk_list"
+              @change="updataChecked(cart.skuId, cart.isChecked)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -63,11 +68,11 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="isCheckedAll" />
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="#none" @click.prevent="deleteSelect">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -109,9 +114,37 @@ export default {
         .filter((cart) => cart.isChecked === 1)
         .reduce((p, c) => (p += c.skuNum * c.skuPrice), 0);
     },
+    //全选按钮
+    isCheckedAll: {
+      get() {
+        return (
+          this.cartList.length && this.totalIsChecked === this.cartList.length
+        );
+      },
+      set(Val) {
+        this.cartList.forEach((cart) => {
+          let newVal = Val ? 1 : 0;
+          cart.isChecked = newVal;
+        });
+      },
+    },
+    // 计算isChecked为1时的复选框数
+    totalIsChecked() {
+      return this.cartList.reduce((p, c) => {
+        if (c.isChecked === 1) {
+          return (p += 1);
+        }
+        return p;
+      }, 0);
+    },
   },
   methods: {
-    ...mapActions(["getCartList", "PostAddToCart", "DeleteCart"]),
+    ...mapActions([
+      "getCartList",
+      "PostAddToCart",
+      "DeleteCart",
+      "GetCheckCart",
+    ]),
     // 更新商品数量
     async updataNum(skuId, skuNum, lastSkuNum) {
       const num = lastSkuNum + skuNum;
@@ -127,9 +160,21 @@ export default {
       // this.getCartList();
       // 第二种方式手动更新vuex的数据 --> 页面就会重新渲染
     },
+    async updataChecked(skuId, skuIsChecked) {
+      let isChecked = skuIsChecked === 1 ? 0 : 1;
+      // console.log(isChecked);
+      await this.GetCheckCart({
+        skuId,
+        isChecked,
+      });
+      // this.getCartList();
+    },
+
     //删除购物车商品
     deleteCart(skuId) {
-      this.DeleteCart(skuId);
+      if (confirm("您确定要删除当前商品吗?")) {
+        this.DeleteCart(skuId);
+      }
     },
   },
   mounted() {
