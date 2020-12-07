@@ -87,7 +87,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link class="sum-btn" to="/trade">结算</router-link>
         </div>
       </div>
     </div>
@@ -148,8 +148,6 @@ export default {
     ]),
     // 更新商品数量
     async updataNum(skuId, skuNum) {
-      // const num = lastSkuNum + skuNum;
-
       // 更新商品
       await this.PostAddToCart({
         skuId,
