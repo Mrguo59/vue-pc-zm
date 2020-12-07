@@ -4,8 +4,14 @@
       <div class="container">
         <div class="top-left">
           <span>尚品汇欢迎您!</span>
-          请<router-link to="/login">登录</router-link>
-          <router-link to="/register">免费注册</router-link>
+          <p v-if="$store.state.user.name">
+            <span>{{ $store.state.user.name }}</span>
+            <button>退出</button>
+          </p>
+          <p v-else>
+            请<router-link to="/login">登录</router-link>
+            <router-link to="/register">免费注册</router-link>
+          </p>
         </div>
         <div class="top-right">
           <ul>
@@ -156,6 +162,8 @@ export default {
     margin: 0 auto;
     .top-left {
       color: #333;
+      display: flex;
+      align-items: center;
       span {
         color: #333;
         margin-right: 12px;

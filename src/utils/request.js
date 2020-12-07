@@ -11,6 +11,7 @@ import axios from 'axios';
 // 引入进度条插件
 import Nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
+import store from '../store';
 
 //引入element-ui组件
 import { Message } from 'element-ui';
@@ -40,6 +41,11 @@ instance.interceptors.request.use(
 		// if (token) {
 		//   config.headers.token = token;
 		// }
+		const token = store.state.user.token;
+
+		if (token) {
+			config.headers.token = token;
+		}
 
 		config.headers.userTempId = userTempId;
 

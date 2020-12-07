@@ -7,20 +7,35 @@
             <li><a href="#">扫码登录</a></li>
             <li class="effect"><a href="#">账户登录</a></li>
           </ul>
-          <form @submit.prevent="login">
-            <div class="input-text">
-              <i></i>
-              <input type="text" placeholder="手机号" />
-            </div>
-            <div class="input-text">
-              <i class="icon"></i>
-              <input type="text" placeholder="请输入密码" />
-            </div>
+          <form @submit.prevent="submit">
+            <ValidationProvider rules="requiredPhone|phone" v-slot="{ errors }">
+              <div class="input-text">
+                <i></i>
+                <input type="text" placeholder="手机号" v-model="user.phone" />
+              </div>
+              <span style="color: red">{{ errors[0] }}</span>
+            </ValidationProvider>
+            <ValidationProvider
+              rules="requiredPassword|password"
+              v-slot="{ errors }"
+            >
+              <div class="input-text">
+                <i class="icon"></i>
+                <input
+                  type="text"
+                  placeholder="请输入密码"
+                  v-model="user.password"
+                />
+              </div>
+              <span style="color: red">{{ errors[0] }}</span>
+            </ValidationProvider>
             <div class="input-check">
-              <label><input type="checkbox" /> 自动登录 </label>
+              <label
+                ><input type="checkbox" v-model="isAutoLogin" /> 自动登录
+              </label>
               <span>忘记密码?</span>
             </div>
-            <button>登 录</button>
+            <button type="submit">登 录</button>
             <div class="form-register">
               <div>
                 <img src="./images/ali.png" alt="" />
@@ -38,20 +53,89 @@
 </template>
 
 <script>
-import { reqLogin } from "@api/user";
-
+import { ValidationProvider, extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+import { mapState } from "vuex";
+//手机号验证
+extend("requiredPhone", {
+  ...required,
+  message: "手机号必须要填写",
+});
+//手机号验证
+extend("phone", {
+  validate(value) {
+    return /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(
+      value
+    );
+  },
+  message: "手机号不符合规范", // 错误信息
+});
+//密码验证
+extend("requiredPassword", {
+  ...required,
+  message: "密码必须要填写", // 错误信息
+});
+extend("password", {
+  validate(value) {
+    return /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value);
+  },
+  message: "密码至少包含 数字和英文，长度6-20", // 错误信息
+});
 export default {
   name: "Login",
+  data() {
+    return {
+      user: {
+        phone: "",
+        password: "",
+      },
+      isLogining: false, // 正在登录
+      isAutoLogin: true, // 是否自动登录
+    };
+  },
+  created() {
+    /*
+      自动登录：
+        在login组件判断是否有token
+        有就认为登录过，跳转到首页
+
+        不够安全：token是可以伪造的
+        解决：拿到token发送请求
+          1. 验证token的合法性（正确，没有过期）
+          2. 请求用户数据
+    */
+    if (this.token) {
+      this.$router.replace("/");
+    }
+  },
+  computed: {
+    ...mapState({
+      token: (state) => state.user.token,
+      name: (state) => state.user.name,
+    }),
+  },
   methods: {
-    login() {
-      reqLogin("13700000000", "111111")
-        .then((res) => {
-          console.log("res", res);
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
+    async submit() {
+      try {
+        if (this.isLogining) return;
+        this.isLogining = true;
+        const { phone, password } = this.user;
+        await this.$store.dispatch("login", { phone, password });
+        // 登录成功
+        //判断是否点击了自动登录按钮
+        if (this.isAutoLogin) {
+          localStorage.setItem("token", this.token);
+          localStorage.setItem("name", this.name);
+        }
+        this.$router.replace("/");
+      } catch {
+        this.user.password = "";
+        this.isLogin = false;
+      }
     },
+  },
+  components: {
+    ValidationProvider,
   },
 };
 </script>

@@ -33,33 +33,34 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a
-              href="javascript:void(0)"
+            <button
               class="mins"
               @click="updataNum(cart.skuId, -1, cart.skuNum)"
-              >-</a
+              :disabled="cart.skuNum === 1"
             >
+              -
+            </button>
             <input
               autocomplete="off"
               type="text"
               :value="cart.skuNum"
               minnum="1"
               class="itxt"
+              @blur="loseUpdataNum(cart.skuId, cart.skuNum, $event)"
             />
-            <a
-              href="javascript:void(0)"
+            <button
               class="plus"
               @click="updataNum(cart.skuId, 1, cart.skuNum)"
-              >+</a
+              :disabled="cart.skuNum === 10"
             >
+              +
+            </button>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet" @click="deleteCart(cart.skuId)"
-              >删除</a
-            >
+            <a class="sindelet" @click="deleteCart(cart)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -146,20 +147,31 @@ export default {
       "GetCheckCart",
     ]),
     // 更新商品数量
-    async updataNum(skuId, skuNum, lastSkuNum) {
-      const num = lastSkuNum + skuNum;
-      if (num > 0) {
-        // 更新商品
-        await this.PostAddToCart({
-          skuId,
-          skuNum,
-        });
-      }
+    async updataNum(skuId, skuNum) {
+      // const num = lastSkuNum + skuNum;
+
+      // 更新商品
+      await this.PostAddToCart({
+        skuId,
+        skuNum,
+      });
       // 第一种方式（再发一次请求）
       // 刷新页面
       // this.getCartList();
       // 第二种方式手动更新vuex的数据 --> 页面就会重新渲染
     },
+    loseUpdataNum(skuId, skuNum, e) {
+      // 当前商品数量是10 e.target.value 6 --> -4  6 - 10
+      // 当前商品数量是3 e.target.value 6 --> 3
+      // console.log(e);
+      if (+e.target.value === skuNum) return;
+
+      this.PostAddToCart({
+        skuId,
+        skuNum: e.target.value - skuNum,
+      });
+    },
+    //更新ischecked的值
     async updataChecked(skuId, skuIsChecked) {
       let isChecked = skuIsChecked === 1 ? 0 : 1;
       // console.log(isChecked);
@@ -171,9 +183,10 @@ export default {
     },
 
     //删除购物车商品
-    deleteCart(skuId) {
-      if (confirm("您确定要删除当前商品吗?")) {
-        this.DeleteCart(skuId);
+    async deleteCart(cart) {
+      let skuId = cart.skuId;
+      if (confirm(`您确定要删除${cart.skuName}吗?`)) {
+        await this.DeleteCart(skuId);
       }
     },
   },
@@ -286,6 +299,7 @@ export default {
             width: 6px;
             text-align: center;
             padding: 8px;
+            outline: none;
           }
 
           input {
@@ -305,6 +319,7 @@ export default {
             width: 6px;
             text-align: center;
             padding: 8px;
+            outline: none;
           }
         }
 
