@@ -91,7 +91,13 @@
                 <dt class="title">{{ spuSaleAttr.saleAttrName }}</dt>
                 <dd
                   changepirce="0"
-                  class="active"
+                  :class="{ active: spuSaleAttrValue.isChecked === '1' }"
+                  @click="
+                    checkValue(
+                      spuSaleAttrValue,
+                      spuSaleAttr.spuSaleAttrValueList
+                    )
+                  "
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
                 >
@@ -367,6 +373,16 @@ export default {
   methods: {
     ...mapActions(["getDetailList", "PostAddToCart"]),
     ...mapMutations(["SKU_INFO_DATA"]),
+    checkValue(value, valueList) {
+      // 如果指定的value已经选中, 直接结束
+      if (value.isChecked === "1") return;
+
+      // 将原本选中变为不选中
+      valueList.forEach((value) => (value.isChecked = "0"));
+
+      // 将指定的value选中
+      value.isChecked = "1";
+    },
     //更新选中图片的下标
     updataImgIndex(index) {
       this.zoomImgIndex = index;
@@ -380,10 +396,10 @@ export default {
           skuId: this.skuInfo.id,
           skuNum: this.skuNum,
         });
-        //把skuInfo放到vuex中，将来让AddCartSuccess组件使用
-        this.SKU_INFO_DATA(this.skuInfo);
-        // 一旦加入购物车，跳转到加入购物车成功页面
-        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+        // // 一旦加入购物车，跳转到加入购物车成功页面
+        this.$router.push(
+          `/addcartsuccess?skuNum=${this.skuNum}&skuId=${this.$route.params.id}`
+        );
       } catch (error) {
         console.log(error);
       }

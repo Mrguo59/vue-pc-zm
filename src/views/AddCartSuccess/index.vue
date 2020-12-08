@@ -28,13 +28,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "AddCartSuccess",
   computed: {
-    ...mapState({
-      skuInfo: (state) => state.shopcart.skuInfo,
-    }),
+    ...mapGetters(["skuInfo"]),
+  },
+  methods: {
+    ...mapActions(["getDetailList"]),
+  },
+  mounted() {
+    this.getDetailList(this.$route.query.skuId);
   },
 };
 </script>

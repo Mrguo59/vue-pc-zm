@@ -47,6 +47,7 @@
               minnum="1"
               class="itxt"
               @blur="loseUpdataNum(cart.skuId, cart.skuNum, $event)"
+              @input="formatSkuNum"
             />
             <button
               class="plus"
@@ -158,6 +159,21 @@ export default {
       // this.getCartList();
       // 第二种方式手动更新vuex的数据 --> 页面就会重新渲染
     },
+    //修正文本框的值的函数
+    formatSkuNum(e) {
+      //匹配到所有的非数字的字符 然后用空字符串替换
+      // console.log(+e.target.value);
+      let skuNum = e.target.value.replace(/\D+/g, "");
+      // 商品数量不能小于1
+      if (skuNum < 1) {
+        skuNum = 1;
+      } else if (skuNum > 10) {
+        // 商品数量不能大于库存
+        skuNum = 10;
+      }
+      e.target.value = skuNum;
+    },
+    //更新文本框的输入的值的函数
     loseUpdataNum(skuId, skuNum, e) {
       // 当前商品数量是10 e.target.value 6 --> -4  6 - 10
       // 当前商品数量是3 e.target.value 6 --> 3

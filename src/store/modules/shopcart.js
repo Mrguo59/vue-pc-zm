@@ -2,8 +2,7 @@ import { reqGetCartList, reqPostAddToCart, reqGetCheckCart, reqDeleteCart } from
 
 export default {
 	state: {
-		cartList: [], // 所有购物车数据
-		skuInfo: {} //AddCartSuccess组件数据
+		cartList: [] // 所有购物车数据
 	},
 	getters: {},
 	actions: {
@@ -59,10 +58,6 @@ export default {
 		//删除购物车商品
 		DELETE_CART(state, skuId) {
 			state.cartList = state.cartList.filter((cart) => cart.skuId !== skuId);
-		},
-		//AddCartSuccess组件数据函数
-		SKU_INFO_DATA(state, skuInfo) {
-			state.skuInfo = skuInfo;
 		}
 	}
 };
