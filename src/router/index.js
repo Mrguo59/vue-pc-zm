@@ -27,17 +27,32 @@ VueRouter.prototype.replace = function(location, onComplate, onAbort) {
 // 安装插件
 Vue.use(VueRouter);
 
-import Home from '../views/Home';
-import Login from '../views/Login';
-import Register from '../views/Register';
-import Search from '../views/Search';
-import Detail from '../views/Detail';
-import ShopCart from '../views/ShopCart';
-import AddCartSuccess from '../views/AddCartSuccess';
-import Trade from '../views/Trade';
-import Center from '../views/Center';
-import Pay from '../views/Pay';
-import PaySuccess from '../views/PaySuccess';
+// import Home from '../views/Home';
+// import Login from '../views/Login';
+// import Register from '../views/Register';
+// import Search from '../views/Search';
+// import Detail from '../views/Detail';
+// import ShopCart from '../views/ShopCart';
+// import AddCartSuccess from '../views/AddCartSuccess';
+// import Trade from '../views/Trade';
+// import Center from '../views/Center';
+// import Pay from '../views/Pay';
+// import PaySuccess from '../views/PaySuccess';
+
+// 路由组件懒加载
+// 1. 会将路由组件打包成单独的js文件（webpack代码分割）
+// 2. 异步加载路由组件（需要使用才加载）（Vue异步加载组件功能）
+const Home = () => import(/* webpackChunkName: "Home" */ '../views/Home');
+const Login = () => import(/* webpackChunkName: "Login" */ '../views/Login');
+const Register = () => import(/* webpackChunkName: "Register" */ '../views/Register');
+const Search = () => import(/* webpackChunkName: "Search" */ '../views/Search');
+const Detail = () => import(/* webpackChunkName: "Detail" */ '../views/Detail');
+const ShopCart = () => import(/* webpackChunkName: "ShopCart" */ '../views/ShopCart');
+const AddCartSuccess = () => import(/* webpackChunkName: "AddCartSuccess" */ '../views/AddCartSuccess');
+const Trade = () => import(/* webpackChunkName: "Trade" */ '../views/Trade');
+const Center = () => import(/* webpackChunkName: "Center" */ '../views/Center');
+const Pay = () => import(/* webpackChunkName: "Pay" */ '../views/Pay');
+const PaySuccess = () => import(/* webpackChunkName: "PaySuccess" */ '../views/PaySuccess');
 
 const router = new VueRouter({
 	routes: [
@@ -81,6 +96,17 @@ const router = new VueRouter({
 			name: 'addcartsuccess',
 			path: '/addcartsuccess',
 			component: AddCartSuccess
+			// 路由独享守卫
+			// beforeEnter: (to, from, next) => {
+			// 	// 需求：只有添加了购物车才能进行，没有添加就去购物车页面
+			// 	// console.log(to, from, next);
+			// 	// 1. 从detail过来 2. 有数据
+			// 	if (from.name === "detail" && sessionStorage.getItem("cart")) {
+			// 		return next();
+			// 	}
+
+			// 	next("/shopcart");
+			// },
 		},
 		{
 			name: 'trade',

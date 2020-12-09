@@ -42,7 +42,7 @@
           :key="detail.skuId"
         >
           <li>
-            <img :src="detail.imgUrl" alt="" style="width: 100px" />
+            <img v-lazy="detail.imgUrl" alt="" style="width: 100px" />
           </li>
           <li>
             <p>
@@ -124,7 +124,7 @@ export default {
     async placeOrder() {
       const { tradeNo, detailArrayList } = this.trade;
       const { consignee, phoneNum, userAddress } = this.selectAddress;
-
+      // 提交订单
       const orderId = await reqSubmitOrder({
         tradeNo,
         consignee,

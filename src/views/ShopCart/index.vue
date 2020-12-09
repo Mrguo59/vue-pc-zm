@@ -21,7 +21,7 @@
             />
           </li>
           <li class="cart-list-con2">
-            <img :src="cart.imgUrl" />
+            <img v-lazy="cart.imgUrl" />
             <div class="item-msg">
               {{ cart.skuName }}
             </div>
@@ -125,8 +125,12 @@ export default {
       },
       set(Val) {
         this.cartList.forEach((cart) => {
-          let newVal = Val ? 1 : 0;
-          cart.isChecked = newVal;
+          // let newVal = Val ? 1 : 0;
+          //在true前面加上加号，会转为1，number类型
+          const isChecked = +Val;
+          const skuId = cart.skuId;
+          cart.isChecked = isChecked;
+          this.GetCheckCart({ skuId, isChecked });
         });
       },
     },

@@ -33,7 +33,7 @@
           <div class="img-item" v-for="rank in ranks" :key="rank.id">
             <p class="tab-pic">
               <a href="#">
-                <img :src="rank.imgUrl" />
+                <img v-lazy="rank.imgUrl" />
               </a>
             </p>
             <div class="tab-info">

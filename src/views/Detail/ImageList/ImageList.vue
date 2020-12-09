@@ -6,7 +6,7 @@
         v-for="(skuImage, index) in skuImageList"
         :key="skuImage.id"
       >
-        <img :src="skuImage.imgUrl" @click="updataImgIndex(index)" />
+        <img v-lazy="skuImage.imgUrl" @click="updataImgIndex(index)" />
       </div>
     </div>
     <div class="swiper-button-next"></div>

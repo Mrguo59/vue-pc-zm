@@ -3,7 +3,7 @@
     <div class="py-container">
       <ul class="brand-list">
         <li class="brand-item" v-for="brand in brands" :key="brand.id">
-          <img :src="brand.imgUrl" />
+          <img v-lazy="brand.imgUrl" />
         </li>
         <!-- <li class="brand-item">
           <img src="./images/brand_03.png" />

@@ -4,12 +4,12 @@
       <ul class="recommend" v-for="recomm in recommends" :key="recomm.id">
         <li class="clock">
           <div class="time">
-            <img :src="recomm.bigImg" />
+            <img v-lazy="recomm.bigImg" />
             <h3>{{ recomm.text }}</h3>
           </div>
         </li>
         <li class="banner" v-for="rec in recomm.carouselList" :key="rec.id">
-          <img :src="rec.imgUrl" />
+          <img v-lazy="rec.imgUrl" />
         </li>
       </ul>
     </div>

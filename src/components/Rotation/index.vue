@@ -6,7 +6,7 @@
         v-for="rotation in rotationList"
         :key="rotation.id"
       >
-        <img :src="rotation.imgUrl" />
+        <img v-lazy="rotation.imgUrl" />
       </div>
     </div>
     <!-- 如果需要分页器 -->

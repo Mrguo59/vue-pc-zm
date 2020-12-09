@@ -19,10 +19,14 @@ import { Message } from 'element-ui';
 import getUserTempId from './getUserTempId';
 
 const userTempId = getUserTempId();
+// 通过其值来区分运行环境
+// console.log(process.env.NODE_ENV); //开发环境：development,生产环境：production
+
+const prefix_url = process.env.NODE_ENV === 'development' ? '/' : 'http://182.92.128.115/';
 
 const instance = axios.create({
 	//  / 就是当前服务器地址
-	baseURL: '/api' // 公共的基础路径
+	baseURL: `${prefix_url}api` // 公共的基础路径
 	// headers: {
 	// token: 'xxx' // 不行，登录接口不需要
 	// }
