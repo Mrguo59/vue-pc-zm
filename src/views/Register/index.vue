@@ -8,7 +8,7 @@
       </p>
     </div>
     <div class="Register-bottom">
-      <form @submit.prevent="submit">
+      <div class="Register-input">
         <div class="bottom-text">
           <label>手机号: </label>
           <ValidationProvider rules="phone|requiredPhone" v-slot="{ errors }">
@@ -69,13 +69,14 @@
           />同意协议并注册《尚品汇用户协议》
           <!-- <p>错误提示信息</p> -->
         </div>
-        <button type="submit">完成注册</button>
-      </form>
+        <Button @click="submit">完成注册</Button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Button from '@comps/Button'
 import { ValidationProvider, extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 //手机号验证
@@ -205,6 +206,7 @@ export default {
   },
   components: {
     ValidationProvider,
+    Button
   },
 };
 </script>
@@ -237,7 +239,7 @@ export default {
   .Register-bottom {
     width: 500px;
     margin: 0 auto;
-    form {
+    .Register-input {
       display: flex;
       flex-direction: column;
       align-items: center;

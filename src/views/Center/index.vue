@@ -90,7 +90,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="orderDetail in record.orderDetailList"
+                    v-for="(orderDetail,index) in record.orderDetailList"
                     :key="orderDetail.skuId"
                   >
                     <td width="60%">
@@ -103,22 +103,22 @@
                         <a href="#" class="service">售后申请</a>
                       </div>
                     </td>
-                    <!-- <template>
-                      <td rowspan="2" width="8%" class="center">
+                    <template v-if="index===0">
+                      <td :rowspan="record.orderDetailList.length" width="8%" class="center">
                         {{ record.consignee }}
                       </td>
-                      <td rowspan="2" width="13%" class="center">
+                      <td :rowspan="record.orderDetailList.length" width="13%" class="center">
                         <ul class="unstyled">
                           <li>总金额¥{{ record.totalAmount }}</li>
-                          <li>在线支付</li>
+                          <li>{{record.paymentWay === 'ONLINE' ? '在线支付' : '货到付款'}}</li>
                         </ul>
                       </td>
-                      <td rowspan="2" width="8%" class="center">
+                      <td :rowspan="record.orderDetailList.length" width="8%" class="center">
                         <a href="#" class="btn"
-                          >{{ record.orderStatusName }}
+                          >{{ record.processStatus === 'UNPAID' ? '未支付' : '已支付'}}
                         </a>
                       </td>
-                      <td rowspan="2" width="13%" class="center">
+                      <td :rowspan="record.orderDetailList.length" width="13%" class="center">
                         <ul class="unstyled">
                           <li>
                             <a href="mycomment.html" target="_blank"
@@ -127,22 +127,17 @@
                           </li>
                         </ul>
                       </td>
-                    </template> -->
+                    </template>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <el-pagination
-              background
-              layout="prev, pager, next,total,jumper,sizes"
-              :page-sizes="[5, 10, 15, 20]"
-              :page-size="limit"
-              :current-page="page"
-              :total="400"
+            <Pagination
+              :total="orders.total"
               @current-change="handleCurrentChange"
             >
               >
-            </el-pagination>
+            </Pagination>
           </div>
           <!--猜你喜欢-->
           <div class="like">
@@ -208,28 +203,29 @@
 
 <script>
 import { reqGetOrderAuth } from "@api/pay";
+import Pagination from '@comps/Pagination'
 
 export default {
   name: "",
   data() {
     return {
-      orders: [],
-      page: 1,
-      limit: 5,
+      orders: {},
     };
   },
   methods: {
-    async handleCurrentChange(val) {
-      const { page, limit } = this;
-      this.page = val;
-      this.orders = await reqGetOrderAuth({ page, limit });
+    async handleCurrentChange(page) {
+      // console.log(page)
+      //page就是当前点击的页码数
+      this.orders = await reqGetOrderAuth({ page, limit:5 });
     },
   },
   async mounted() {
-    const { page, limit } = this;
-    this.orders = await reqGetOrderAuth({ page, limit });
-    console.log(this.orders);
+    //一上来就发请求，拿数据，默认page为1，limit为5
+    this.orders = await reqGetOrderAuth({ page:1, limit:5 });
   },
+  components:{
+    Pagination
+  }
 };
 </script>
 
