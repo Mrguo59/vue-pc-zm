@@ -8,14 +8,17 @@ export default {
 	},
 	getters: {},
 	actions: {
+		//注册
 		async register({ commit }, { phone, password, code }) {
 			await reqRegister({ phone, password, code });
 			console.log(commit);
 		},
+		//登录
 		async login({ commit }, { phone, password }) {
 			const user = await reqLogin({ phone, password });
 			commit('LOGIN', user);
 		},
+		//退出登录
 		async Logout({ commit }) {
 			await reqLogout();
 			commit('LOGOUT');

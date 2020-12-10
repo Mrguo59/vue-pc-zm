@@ -30,24 +30,24 @@ export const reqGetFloors = () => {
 		url: '/floors'
 	});
 };
-
+//获取TodayRecommend组件数据
 export const reqGetRecommends = () => {
 	return mockRequest({
 		methods: 'GET',
 		url: '/todayRecommend'
 	});
 };
-
+//获取Rank组件数据
 export const reqGetRank = () => {
 	return mockRequest({
 		methods: 'GET',
 		url: '/rank'
 	});
 };
-
+//获取Brand组件数据
 export const reqGetBrand = () => {
 	return mockRequest({
 		methods: 'GET',
 		url: '/brand'
-	})
-}
+	});
+};

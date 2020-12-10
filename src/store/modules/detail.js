@@ -12,6 +12,7 @@ export default {
 		}
 	},
 	getters: {
+		//把请求的回来的数据，分别放在getters
 		categoryView(state) {
 			return state.DetailList.categoryView;
 		},
@@ -23,6 +24,7 @@ export default {
 		}
 	},
 	actions: {
+		// 获取商品详情数据
 		async getDetailList({ commit }, id) {
 			const DetailList = await reqGetDetailList(id);
 			commit('GET_DETAIL_LIST', DetailList);

@@ -93,7 +93,7 @@
                   changepirce="0"
                   :class="{ active: spuSaleAttrValue.isChecked === '1' }"
                   @click="
-                    checkValue(
+                    clickSelect(
                       spuSaleAttrValue,
                       spuSaleAttr.spuSaleAttrValueList
                     )
@@ -373,11 +373,11 @@ export default {
   methods: {
     ...mapActions(["getDetailList", "PostAddToCart"]),
     ...mapMutations(["SKU_INFO_DATA"]),
-    checkValue(value, valueList) {
+    clickSelect(value, valueList) {
       // 如果指定的value已经选中, 直接结束
       if (value.isChecked === "1") return;
 
-      // 将原本选中变为不选中
+      // 遍历所有的数据，将原本选中变为不选中
       valueList.forEach((value) => (value.isChecked = "0"));
 
       // 将指定的value选中

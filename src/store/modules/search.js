@@ -11,7 +11,7 @@ export default {
 	},
 
 	getters: {
-		// 方便使用数据
+		// 把请求回来的数据分别放在getters中，方便使用数据
 		trademarkList(state) {
 			return state.searchList.trademarkList;
 		},
@@ -21,12 +21,13 @@ export default {
 		goodsList(state) {
 			return state.searchList.goodsList;
 		},
-		total(state){
-			return state.searchList.total
+		total(state) {
+			return state.searchList.total;
 		}
 	},
 
 	actions: {
+		// 获取所有商品数据
 		async getSearchList({ commit }, data = {}) {
 			const searchList = await reqGetSearchList(data);
 			commit('GET_SEARCH_LIST', searchList);
