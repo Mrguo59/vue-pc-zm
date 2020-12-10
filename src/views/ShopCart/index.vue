@@ -207,6 +207,14 @@ export default {
         await this.DeleteCart(skuId);
       }
     },
+    //删除当前选中的商品
+    async deleteSelect(){
+      if(confirm('您确定要删除当前选中的商品吗?')){
+        await this.cartList.filter((cart) =>  cart.isChecked === 1).forEach((cart) => {
+         this.DeleteCart(cart.skuId)
+      })
+      }
+    }
   },
   mounted() {
     this.getCartList();

@@ -1,4 +1,4 @@
-import { reqRegister, reqLogin } from '@api/user';
+import { reqRegister, reqLogin, reqLogout } from '@api/user';
 
 export default {
 	state: {
@@ -15,11 +15,22 @@ export default {
 		async login({ commit }, { phone, password }) {
 			const user = await reqLogin({ phone, password });
 			commit('LOGIN', user);
+		},
+		async Logout({ commit }) {
+			await reqLogout();
+			commit('LOGOUT');
 		}
 	},
 	mutations: {
 		LOGIN(state, user) {
 			(state.token = user.token), (state.name = user.name);
+		},
+		LOGOUT(state) {
+			//点击退出登录，清除vuex里的token和name
+			(state.token = ''), (state.name = '');
+			//清除localStorage存储的token和name
+			localStorage.removeItem('token');
+			localStorage.removeItem('name');
 		}
 	}
 };

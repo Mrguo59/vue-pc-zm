@@ -6,7 +6,7 @@
           <span>尚品汇欢迎您!</span>
           <p v-if="$store.state.user.name">
             <span>{{ $store.state.user.name }}</span>
-            <button>退出</button>
+            <button @click="logOut">退出</button>
           </p>
           <p v-else>
             请<router-link to="/login">登录</router-link>
@@ -50,6 +50,8 @@
                 @click="search"
            -->
 <script>
+// import {reqLogout} from '@api/user'
+
 export default {
   name: "Header",
   data() {
@@ -137,6 +139,14 @@ export default {
         this.$router.push(location);
       }
     },
+    //退出登录
+    async logOut(){
+      if(confirm('您确定要退出登录吗?')){
+        await this.$store.dispatch("Logout")
+        //退出登录以后跳转到登录页面
+        this.$router.push("/login")
+      }
+    }
   },
   mounted() {
     this.$bus.$on("clearKeyword", () => {
